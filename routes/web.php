@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RequestsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +18,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/home');
 });
+
+Route::get('/home', [HomeController::class, 'renderHome'])->name('homeView');
+Route::get('/register', [RegisterController::class, 'registerView'])->name('registerView');
+Route::get('/login', [AuthController::class, 'renderLogin'])->name('loginView');
+Route::get('/requests', [RequestsController::class, 'get'])->name('requestsView');

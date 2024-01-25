@@ -1,0 +1,113 @@
+body
+{
+    margin: 0;
+    box-sizing: border-box;
+    background-color: rgb(168, 168, 168);
+}
+
+table
+{
+    margin: 0 auto;
+    border: 2px solid black;
+}
+
+table *
+{
+    border: 1px solid black;
+}
+
+table tr:nth-child(2n)
+{
+    color: black;
+    background-color: rgb(227, 227, 227);
+}
+
+table tr:nth-child(2n - 1)
+{
+    color: rgb(255, 255, 255);
+    background-color: rgb(41, 41, 41);
+}
+
+#sendRequestForm
+{
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    width: 70%;
+    align-items: center;
+}
+
+#sendRequestForm *
+{
+    width: 80%;
+}
+
+#sendRequestForm a
+{
+    text-align: center;
+}
+
+#sendRequestForm input
+{
+    height: 50px;
+}
+
+.buttons
+{
+    margin: 100px auto;
+    display: flex;
+    width: 300px;
+    justify-content: space-around;
+}
+
+.buttons a
+{
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    text-decoration: none;
+    color: black;
+    transition: all .2s linear;
+}
+
+.buttons a:visited
+{
+    text-decoration: none;
+    color: black
+}
+
+.loginButton, .registerButton
+{
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    width: 100px;
+    height: 50px;
+    align-self: center;
+    border: none;
+    color: black;
+    transition: all .2s linear;
+}
+
+.loginButtonBlock:hover, .loginButton:hover
+{
+    background-color: rgb(41, 184, 106);
+    color: white;
+    border-radius: 0;
+}
+
+.registerButtonBlock:hover, .registerButton:hover
+{
+    background-color: rgb(221, 218, 34);
+    border-radius: 0;
+}
+
+.loginForm, .registrationForm
+{
+    margin: 0 auto;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}

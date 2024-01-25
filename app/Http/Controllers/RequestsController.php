@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request as Req;
 use App\Models\Request;
+use Illuminate\Support\Facades\Auth;
 
 use Mail;
 use App\Mail\ResponseMail;
@@ -12,40 +13,55 @@ use App\Mail\ResponseMail;
 class RequestsController extends Controller
 {
     public function get() {
-        $requests = Request::orderBy('status', 'asc')->get();
         $data = [];
-        foreach ($requests as $request) {
-            array_push($data, ["id"=>$request->id, 
-                "name"=>$request->name, 
-                "email"=>$request->email, 
-                "status"=>$request->status, 
-                "message"=>$request->message, 
-                "comment"=>$request->comment, 
-                "created_at"=>$request->created_at, 
-                "updated_at"=>$request->updated_at]);
+        $is_admin = false;
+        if (Auth::check()){
+            if (Auth::user()->email == env("ADMIN_EMAIL")){
+                $is_admin = true;
+                $requests = Request::orderBy('status', 'asc')->get();
+                foreach ($requests as $request) {
+                    array_push($data, ["id"=>$request->id, 
+                        "name"=>$request->name, 
+                        "email"=>$request->email, 
+                        "status"=>$request->status, 
+                        "message"=>$request->message, 
+                        "comment"=>$request->comment, 
+                        "created_at"=>$request->created_at, 
+                        "updated_at"=>$request->updated_at]);
+                }
+            } else {
+                $requests = Request::orderBy('status', 'asc')->get()->where('email', Auth::user()->email);
+                foreach ($requests as $request) {
+                    array_push($data, ["id"=>$request->id, 
+                        "name"=>$request->name, 
+                        "email"=>$request->email, 
+                        "status"=>$request->status, 
+                        "message"=>$request->message, 
+                        "comment"=>$request->comment, 
+                        "created_at"=>$request->created_at, 
+                        "updated_at"=>$request->updated_at]);
+                }
+            }
         }
-        return json_encode($data);
+        return view('requests')->with('users', $data)->with('isAdmin', $is_admin);
     }
 
     public function create() {
-        if (!array_key_exists("name", $_POST) || $_POST['name'] == '') {
+        if (auth()->user()->name == '') {
             return json_encode(['error'=>'Name is required fied!']);
         }
-        if (!array_key_exists("email", $_POST) || $_POST['email'] == '') {
+        if (auth()->user()->email == '') {
             return json_encode(['error'=>'Email is required fied!']);
-        }
-        if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-            return json_encode(['error'=>'Email is not valid!']);
         }
         if (!array_key_exists("message", $_POST) || $_POST['message'] == '') {
             return json_encode(['error'=>'Message is required fied!']);
         }
         Request::create([
-            'name'=>$_POST['name'],
-            'email'=>$_POST['email'],
+            'name'=>auth()->user()->name,
+            'email'=>auth()->user()->email,
             'message'=>$_POST['message']
         ]);
-        return json_encode(['succes'=>'Request successfully addedd!']);
+        return redirect()->intended('home');;
     }
 
     public function resolve(Req $req, string $id) {

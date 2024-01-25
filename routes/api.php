@@ -19,8 +19,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 use App\Http\Controllers\RequestsController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LogOutController;
 
-Route::get('/requests', [RequestsController::class, 'get']);
-Route::post('/requests', [RequestsController::class, 'create']);
-Route::put('/requests/{id}', [RequestsController::class, 'resolve']);
+Route::group(['middleware' => ['web']], function () {
+    Route::get('/requests', [RequestsController::class, 'get']);
+    Route::post('/requests', [RequestsController::class, 'create'])->name("requestForm");
+    Route::put('/requests/{id}', [RequestsController::class, 'resolve'])->name("resolve");
+    Route::post('/register', [RegisterController::class, 'register'])->name('register');
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/logout', [LogOutController::class, 'logout'])->name('logout');
+});
 
